@@ -14,24 +14,27 @@ class Library:
 
     def set_id(self, id: int) -> None:
         if not isinstance(id, int):
-            raise TypeError("ID must be an integer")
+            raise TypeError("'id' must be an integer")
         if id <= 0:
-            raise ValueError("ID can't be less than zero or equal to zero")
+            raise ValueError("'id' can't be less than zero or equal to zero")
 
         self._id = id
 
     def set_is_global(self, is_global: bool) -> None:
         if not isinstance(is_global, bool):
-            raise TypeError("Is global must be a boolean")
+            raise TypeError("'is_global' must be a boolean")
 
         self._is_global = is_global
 
     def set_folder(self, folder: str) -> None:
         if not isinstance(folder, str):
-            raise TypeError("Folder must be a string")
+            raise TypeError("'folder' must be a string")
+
+        if not folder:
+            raise ValueError("'folder' can't be empty")
 
         if not os.path.exists(folder):
-            raise ValueError("Not a valid folder!")
+            raise ValueError("'folder' is not a valid folder!")
 
         self._folder = folder
 

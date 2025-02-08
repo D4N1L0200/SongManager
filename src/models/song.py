@@ -31,53 +31,65 @@ class Song:
 
     def set_id(self, id: int) -> None:
         if not isinstance(id, int):
-            raise TypeError("ID must be an integer")
+            raise TypeError("'id' must be an integer")
         if id <= 0:
-            raise ValueError("ID can't be less than zero or equal to zero")
+            raise ValueError("'id' can't be less than zero or equal to zero")
 
         self._id = id
 
     def set_id_library(self, id_library: int) -> None:
         if not isinstance(id_library, int):
-            raise TypeError("ID library must be an integer")
+            raise TypeError("'id_library' must be an integer")
         if id_library <= 0:
-            raise ValueError("ID library can't be less than zero or equal to zero")
+            raise ValueError("'id_library' can't be less than zero or equal to zero")
 
         self._id_library = id_library
 
     def set_title(self, title: str) -> None:
         if not isinstance(title, str):
-            raise TypeError("Title must be a string")
+            raise TypeError("'title' must be a string")
+
+        if not title:
+            raise ValueError("'title' can't be empty")
 
         self._title = title
 
     def set_artist(self, artist: str) -> None:
         if not isinstance(artist, str):
-            raise TypeError("Artist must be a string")
+            raise TypeError("'artist' must be a string")
+
+        if not artist:
+            raise ValueError("'artist' can't be empty")
 
         self._artist = artist
 
     def set_genre(self, genre: str) -> None:
         if not isinstance(genre, str):
-            raise TypeError("Genre must be a string")
+            raise TypeError("'genre' must be a string")
+
+        if not genre:
+            raise ValueError("'genre' can't be empty")
 
         self._genre = genre
 
     def set_file(self, file: str) -> None:
         if not isinstance(file, str):
-            raise TypeError("File must be a string")
+            raise TypeError("'file' must be a string")
+
+        if not file:
+            raise ValueError("'file' can't be empty")
 
         if not os.path.isfile(file):
-            raise ValueError("Not a valid file!")
+            raise ValueError("'file' is not a valid file")
 
         self._file = file
 
     def set_count(self, count: int) -> None:
         if not isinstance(count, int):
-            raise TypeError("Count must be an integer")
+            raise TypeError("'count' must be an integer")
 
         if count < 0:
-            raise ValueError("Count can't be less than zero")
+            raise ValueError("'count' can't be less than zero")
 
         self._count = count
 
@@ -103,7 +115,7 @@ class Song:
         return self._count
 
     def __str__(self):
-        return f"ID: {self.get_id()}; ID Library: {self.get_id_library()}; Title: {self.get_title()}; Artist: {self.get_artist()}; Genre: {self.get_genre()}; File: {self.get_file()}; Count: {self.get_count()}"
+        return f"ID: {self.get_id()}; Library ID: {self.get_id_library()}; Title: {self.get_title()}; Artist: {self.get_artist()}; Genre: {self.get_genre()}; File: {self.get_file()}; Count: {self.get_count()}"
 
 
 class SongDAO(DAO["Song"]):
