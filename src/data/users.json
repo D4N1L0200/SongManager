@@ -1,9 +1,0 @@
-[
-	{
-		"id": 1,
-		"name": "John Updated",
-		"password": "newpassword",
-		"creation_date": "2025-02-09 17:25:17",
-		"is_admin": true
-	}
-]
