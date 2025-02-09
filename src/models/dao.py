@@ -1,17 +1,40 @@
+import os
+import json
 from abc import ABC, abstractmethod
+from typing import Generic, TypeVar, Protocol
 
 
-from typing import Generic, TypeVar
+class HasId(Protocol):
+    def get_id(self) -> int: ...
 
-T = TypeVar("T")
+    def set_id(self, id: int) -> None: ...
 
 
-class DAO(Generic[T]):
+T = TypeVar("T", bound=HasId)
+
+
+class DAO(ABC, Generic[T]):
     objects: list[T] = []
+    file_name: str
+    
+    @classmethod
+    def clear(cls) -> None:
+        cls.objects = []
+        cls.save()
 
     @classmethod
     def insert(cls, obj: T) -> None:
+        if obj.get_id() == 0:
+            ids: list[int] = [0]
+
+            for o in cls.objects:
+                ids.append(o.get_id())
+
+            obj.set_id(max(ids) + 1)
+
         cls.objects.append(obj)
+
+        cls.save()
 
     @classmethod
     def get(cls) -> list[T]:
@@ -19,31 +42,63 @@ class DAO(Generic[T]):
 
     @classmethod
     def get_by_id(cls, id: int) -> T:
-        if id < 0 or id >= len(cls.objects):
-            raise IndexError("Index out of range")
+        if id not in [o.get_id() for o in cls.objects]:
+            raise IndexError("ID not found")
 
-        return cls.objects[id]
+        idx: int = [o.get_id() for o in cls.objects].index(id)
+
+        return cls.objects[idx]
 
     @classmethod
     def update(cls, id: int, obj: T) -> None:
-        if id < 0 or id >= len(cls.objects):
-            raise IndexError("Index out of range")
+        if id not in [o.get_id() for o in cls.objects]:
+            raise IndexError("ID not found")
 
-        cls.objects[id] = obj
+        idx: int = [o.get_id() for o in cls.objects].index(id)
+        cls.objects[idx] = obj
+
+        cls.save()
 
     @classmethod
     def delete(cls, id: int) -> None:
-        if id < 0 or id >= len(cls.objects):
-            raise IndexError("Index out of range")
+        if id not in [o.get_id() for o in cls.objects]:
+            raise IndexError("ID not found")
 
-        del cls.objects[id]
+        idx: int = [o.get_id() for o in cls.objects].index(id)
+        del cls.objects[idx]
+
+        cls.save()
+
+    @classmethod
+    def save(cls) -> None:
+        data: list[dict] = []
+
+        for obj in cls.objects:
+            data.append(cls.to_dict(obj))
+
+        with open(f"data/{cls.file_name}.json", "w") as f:
+            json.dump(data, f)
+
+    @classmethod
+    def load(cls) -> None:
+        if not os.path.isfile(f"data/{cls.file_name}.json"):
+            with open(f"data/{cls.file_name}.json", "w") as f:
+                json.dump([], f)
+
+        with open(f"data/{cls.file_name}.json", "r") as f:
+            data = json.load(f)
+
+        cls.clear()
+
+        for obj in data:
+            cls.insert(cls.from_dict(obj))
 
     @classmethod
     @abstractmethod
-    def save(cls) -> None:
+    def to_dict(cls, obj: T) -> dict:
         pass
 
     @classmethod
     @abstractmethod
-    def load(cls) -> None:
+    def from_dict(cls, data: dict) -> T:
         pass

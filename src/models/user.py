@@ -1,8 +1,8 @@
-from dao import DAO
+from models.dao import DAO, HasId
 from datetime import datetime
 
 
-class User:
+class User(HasId):
     def __init__(
         self,
         id: int,
@@ -27,8 +27,8 @@ class User:
         if not isinstance(id, int):
             raise TypeError("'id' must be an integer")
 
-        if id <= 0:
-            raise ValueError("'id' can't be less than zero or equal to zero")
+        if id < 0:
+            raise ValueError("'id' can't be less than zero")
 
         self._id = id
 
@@ -85,10 +85,24 @@ class User:
 
 
 class UserDAO(DAO["User"]):
-    @classmethod
-    def save(cls) -> None:
-        pass
+    file_name = "users"
 
     @classmethod
-    def load(cls) -> None:
-        pass
+    def to_dict(cls, obj: User) -> dict:
+        return {
+            "id": obj.get_id(),
+            "name": obj.get_name(),
+            "password": obj.get_password(),
+            "creation_date": obj.get_creation_date().strftime("%Y-%m-%d %H:%M:%S"),
+            "is_admin": obj.get_is_admin(),
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> User:
+        return User(
+            data["id"],
+            data["name"],
+            data["password"],
+            datetime.strptime(data["creation_date"], "%Y-%m-%d %H:%M:%S"),
+            data["is_admin"],
+        )
