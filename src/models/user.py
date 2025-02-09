@@ -1,5 +1,5 @@
-from models.dao import DAO, HasId
 from datetime import datetime
+from models.dao import DAO, HasId
 
 
 class User(HasId):

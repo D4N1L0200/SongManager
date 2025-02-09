@@ -1,5 +1,5 @@
 import os
-from dao import DAO
+from models.dao import DAO
 
 
 class Song:
@@ -32,8 +32,8 @@ class Song:
     def set_id(self, id: int) -> None:
         if not isinstance(id, int):
             raise TypeError("'id' must be an integer")
-        if id <= 0:
-            raise ValueError("'id' can't be less than zero or equal to zero")
+        if id < 0:
+            raise ValueError("'id' can't be less than zero")
 
         self._id = id
 
@@ -79,8 +79,9 @@ class Song:
         if not file:
             raise ValueError("'file' can't be empty")
 
-        if not os.path.isfile(file):
-            raise ValueError("'file' is not a valid file")
+        # TODO: Temporarily removed
+        # if not os.path.isfile(file):
+        #     raise ValueError("'file' is not a valid file")
 
         self._file = file
 
@@ -119,10 +120,28 @@ class Song:
 
 
 class SongDAO(DAO["Song"]):
-    @classmethod
-    def save(cls) -> None:
-        pass
+    file_name = "songs"
 
     @classmethod
-    def load(cls) -> None:
-        pass
+    def to_dict(cls, obj: Song) -> dict:
+        return {
+            "id": obj.get_id(),
+            "id_library": obj.get_id_library(),
+            "title": obj.get_title(),
+            "artist": obj.get_artist(),
+            "genre": obj.get_genre(),
+            "file": obj.get_file(),
+            "count": obj.get_count(),
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> Song:
+        return Song(
+            data["id"],
+            data["id_library"],
+            data["title"],
+            data["artist"],
+            data["genre"],
+            data["file"],
+            data["count"],
+        )

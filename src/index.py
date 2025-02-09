@@ -1,5 +1,6 @@
 from datetime import datetime
 from models.user import User, UserDAO
+from models.song import Song, SongDAO
 
 
 def print_objs(objs: list):
@@ -47,6 +48,55 @@ def test_user_dao():
     print_objs(UserDAO.get())
 
 
+def test_song_dao():
+    SongDAO.clear()
+
+    song1 = Song(
+        id=0,
+        id_library=1,
+        title="Bohemian Rhapsody",
+        artist="Queen",
+        genre="Rock",
+        file="bohemian_rhapsody.mp3",
+        count=0,
+    )
+    song2 = Song(
+        id=0,
+        id_library=1,
+        title="Shape of You",
+        artist="Ed Sheeran",
+        genre="Pop",
+        file="shape_of_you.mp3",
+        count=0,
+    )
+
+    SongDAO.insert(song1)
+    SongDAO.insert(song2)
+    print("Inserted songs:")
+    print_objs(SongDAO.get())
+
+    retrieved_song = SongDAO.get_by_id(1)
+    print(f"Retrieved song with ID 1:\n{retrieved_song}\n")
+
+    updated_song = SongDAO.get_by_id(1)
+    if updated_song:
+        updated_song.set_title("Bohemian Rhapsody (Remastered)")
+        updated_song.set_artist("Queen Remastered")
+        updated_song.set_count(100)
+        SongDAO.update(updated_song.get_id(), updated_song)
+        print("Updated song with ID 1:")
+        print_objs(SongDAO.get())
+
+    SongDAO.delete(2)
+    print("Deleted song with ID 2:")
+    print_objs(SongDAO.get())
+
+
 if __name__ == "__main__":
+    print("\n\n\tTesting Users:")
     UserDAO.load()
     test_user_dao()
+
+    print("\n\n\tTesting Songs:")
+    SongDAO.load()
+    test_song_dao()
