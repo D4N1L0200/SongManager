@@ -17,7 +17,7 @@ def test_user_dao():
         name="John Doe",
         password="password123",
         creation_date=datetime.now(),
-        is_admin=False,
+        is_admin=6,
     )
     user2 = User(
         id=0,
@@ -39,7 +39,7 @@ def test_user_dao():
     updated_user.set_name("John Updated")
     updated_user.set_password("newpassword")
     updated_user.set_is_admin(True)
-    UserDAO.update(updated_user.get_id(), updated_user)
+    UserDAO.update(updated_user.id, updated_user)
     print("Updated user with ID 1:")
     print_objs(UserDAO.get())
 
@@ -83,7 +83,7 @@ def test_song_dao():
         updated_song.set_title("Bohemian Rhapsody (Remastered)")
         updated_song.set_artist("Queen Remastered")
         updated_song.set_count(100)
-        SongDAO.update(updated_song.get_id(), updated_song)
+        SongDAO.update(updated_song.id, updated_song)
         print("Updated song with ID 1:")
         print_objs(SongDAO.get())
 
