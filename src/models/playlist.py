@@ -1,4 +1,4 @@
-from dao import DAO
+from models.dao import DAO
 from datetime import datetime
 
 
@@ -31,8 +31,9 @@ class Playlist:
     def id(self, id: int) -> None:
         if not isinstance(id, int):
             raise TypeError("'id' must be an integer")
-        if id <= 0:
-            raise ValueError("'id' can't be less than zero or equal to zero")
+
+        if id < 0:
+            raise ValueError("'id' can't be less than zero")
 
         self.__id = id
 

@@ -5,9 +5,7 @@ from typing import Generic, TypeVar, Protocol
 
 
 class HasId(Protocol):
-    def get_id(self) -> int: ...
-
-    def set_id(self, id: int) -> None: ...
+    id: int
 
 
 T = TypeVar("T", bound=HasId)
@@ -16,7 +14,7 @@ T = TypeVar("T", bound=HasId)
 class DAO(ABC, Generic[T]):
     objects: list[T] = []
     file_name: str
-    
+
     @classmethod
     def clear(cls) -> None:
         cls.objects = []
@@ -24,13 +22,13 @@ class DAO(ABC, Generic[T]):
 
     @classmethod
     def insert(cls, obj: T) -> None:
-        if obj.get_id() == 0:
+        if obj.id == 0:
             ids: list[int] = [0]
 
             for o in cls.objects:
-                ids.append(o.get_id())
+                ids.append(o.id)
 
-            obj.set_id(max(ids) + 1)
+            obj.id = max(ids) + 1
 
         cls.objects.append(obj)
 
@@ -42,29 +40,29 @@ class DAO(ABC, Generic[T]):
 
     @classmethod
     def get_by_id(cls, id: int) -> T:
-        if id not in [o.get_id() for o in cls.objects]:
+        if id not in [o.id for o in cls.objects]:
             raise IndexError("ID not found")
 
-        idx: int = [o.get_id() for o in cls.objects].index(id)
+        idx: int = [o.id for o in cls.objects].index(id)
 
         return cls.objects[idx]
 
     @classmethod
     def update(cls, id: int, obj: T) -> None:
-        if id not in [o.get_id() for o in cls.objects]:
+        if id not in [o.id for o in cls.objects]:
             raise IndexError("ID not found")
 
-        idx: int = [o.get_id() for o in cls.objects].index(id)
+        idx: int = [o.id for o in cls.objects].index(id)
         cls.objects[idx] = obj
 
         cls.save()
 
     @classmethod
     def delete(cls, id: int) -> None:
-        if id not in [o.get_id() for o in cls.objects]:
+        if id not in [o.id for o in cls.objects]:
             raise IndexError("ID not found")
 
-        idx: int = [o.get_id() for o in cls.objects].index(id)
+        idx: int = [o.id for o in cls.objects].index(id)
         del cls.objects[idx]
 
         cls.save()
