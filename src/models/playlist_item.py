@@ -3,69 +3,89 @@ from dao import DAO
 
 class PlaylistItem:
     def __init__(self, id: int, id_playlist: int, id_song: int, count: int) -> None:
-        self._id: int = 0
-        self._id_playlist: int = 0
-        self._id_song: int = 0
-        self._count: int = 0
+        self.__id: int = 0
+        self.__id_playlist: int = 0
+        self.__id_song: int = 0
+        self.__count: int = 0
 
-        self.set_id(id)
-        self.set_id_playlist(id_playlist)
-        self.set_id_song(id_song)
-        self.set_count(count)
+        self.id = id
+        self.id_playlist = id_playlist
+        self.id_song = id_song
+        self.count = count
 
-    def set_id(self, id: int) -> None:
+    @property
+    def id(self) -> int:
+        return self.__id
+
+    @id.setter
+    def id(self, id: int) -> None:
         if not isinstance(id, int):
             raise TypeError("'id' must be an integer")
         if id <= 0:
             raise ValueError("'id' can't be less than zero or equal to zero")
 
-        self._id = id
+        self.__id = id
 
-    def set_id_playlist(self, id_playlist: int) -> None:
+    @property
+    def id_playlist(self) -> int:
+        return self.__id_playlist
+
+    @id_playlist.setter
+    def id_playlist(self, id_playlist: int) -> None:
         if not isinstance(id_playlist, int):
             raise TypeError("'id_playlist' must be an integer")
         if id_playlist <= 0:
             raise ValueError("'id_playlist' can't be less than zero or equal to zero")
 
-        self._id_playlist = id_playlist
+        self.__id_playlist = id_playlist
 
-    def set_id_song(self, id_song: int) -> None:
+    @property
+    def id_song(self) -> int:
+        return self.__id_song
+
+    @id_song.setter
+    def id_song(self, id_song: int) -> None:
         if not isinstance(id_song, int):
             raise TypeError("'id_song' must be an integer")
         if id_song <= 0:
             raise ValueError("'id_song' can't be less than zero or equal to zero")
 
-        self._id_song = id_song
+        self.__id_song = id_song
 
-    def set_count(self, count: int) -> None:
+    @property
+    def count(self) -> int:
+        return self.__count
+
+    @count.setter
+    def count(self, count: int) -> None:
         if not isinstance(count, int):
             raise TypeError("'count' must be an integer")
         if count <= 0:
             raise ValueError("'count' can't be less than zero or equal to zero")
 
-        self._count = count
-
-    def get_id(self) -> int:
-        return self._id
-
-    def get_id_playlist(self) -> int:
-        return self._id_playlist
-
-    def get_id_song(self) -> int:
-        return self._id_song
-
-    def get_count(self) -> int:
-        return self._count
+        self.__count = count
 
     def __str__(self):
-        return f"ID: {self.get_id()}; Playlist ID: {self.get_id_playlist()}; Song ID: {self.get_id_song()}; Count: {self.get_count()}"
+        return f"ID: {self.id}; Playlist ID: {self.id_playlist}; Song ID: {self.id_song}; Count: {self.count}"
 
 
 class PlaylistItemDAO(DAO["PlaylistItem"]):
-    @classmethod
-    def save(cls) -> None:
-        pass
+    file_name = "playlist_item"
 
     @classmethod
-    def load(cls) -> None:
-        pass
+    def to_dict(cls, obj: PlaylistItem) -> dict:
+        return {
+            "id": obj.id,
+            "id_playlist": obj.id_playlist,
+            "id_song": obj.id_song,
+            "count": obj.count,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> PlaylistItem:
+        return PlaylistItem(
+            data["id"],
+            data["id_playlist"],
+            data["id_song"],
+            data["count"],
+        )

@@ -11,85 +11,109 @@ class Playlist:
         description: str,
         creation_date: datetime,
     ) -> None:
-        self._id: int = 0
-        self._id_user: int = 0
-        self._name: str = ""
-        self._description: str = ""
-        self._creation_date: datetime = datetime.now()
+        self.__id: int = 0
+        self.__id_user: int = 0
+        self.__name: str = ""
+        self.__description: str = ""
+        self.__creation_date: datetime = datetime.now()
 
-        self.set_id(id)
-        self.set_id_user(id_user)
-        self.set_name(name)
-        self.set_description(description)
-        self.set_creation_date(creation_date)
+        self.id = id
+        self.id_user = id_user
+        self.name = name
+        self.description = description
+        self.creation_date = creation_date
 
-    def set_id(self, id: int) -> None:
+    @property
+    def id(self) -> int:
+        return self.__id
+
+    @id.setter
+    def id(self, id: int) -> None:
         if not isinstance(id, int):
             raise TypeError("'id' must be an integer")
         if id <= 0:
             raise ValueError("'id' can't be less than zero or equal to zero")
 
-        self._id = id
+        self.__id = id
 
-    def set_id_user(self, id_user: int) -> None:
+    @property
+    def id_user(self) -> int:
+        return self.__id_user
+
+    @id_user.setter
+    def id_user(self, id_user: int) -> None:
         if not isinstance(id_user, int):
             raise TypeError("'id_user' must be an integer")
         if id_user <= 0:
             raise ValueError("'id_user' can't be less than zero or equal to zero")
 
-        self._id_user = id_user
+        self.__id_user = id_user
 
-    def set_name(self, name: str) -> None:
+    @property
+    def name(self) -> str:
+        return self.__name
+
+    @name.setter
+    def name(self, name: str) -> None:
         if not isinstance(name, str):
             raise TypeError("'name' must be a string")
 
         if not name:
             raise ValueError("'name' can't be empty")
 
-        self._name = name
+        self.__name = name
 
-    def set_description(self, description: str) -> None:
+    @property
+    def description(self) -> str:
+        return self.__description
+
+    @description.setter
+    def description(self, description: str) -> None:
         if not isinstance(description, str):
             raise TypeError("'description' must be a string")
 
         if not description:
             raise ValueError("'description' can't be empty")
 
-        self._description = description
+        self.__description = description
 
-    def set_creation_date(self, creation_date: datetime) -> None:
+    @property
+    def creation_date(self) -> datetime:
+        return self.__creation_date
+
+    @creation_date.setter
+    def creation_date(self, creation_date: datetime) -> None:
         if not isinstance(creation_date, datetime):
             raise TypeError("'creation_date' must be a datetime")
 
         if creation_date > datetime.now():
             raise ValueError("'creation_date' can't be in the future")
 
-        self._creation_date = creation_date
-
-    def get_id(self) -> int:
-        return self._id
-
-    def get_id_user(self) -> int:
-        return self._id_user
-
-    def get_name(self) -> str:
-        return self._name
-
-    def get_description(self) -> str:
-        return self._description
-
-    def get_creation_date(self) -> datetime:
-        return self._creation_date
+        self.__creation_date = creation_date
 
     def __str__(self):
-        return f"ID: {self.get_id()}; ID User: {self.get_id_user()}; name: {self.get_name()}; description: {self.get_description()}; creation date: {self.get_creation_date()}"
+        return f"ID: {self.id}; ID User: {self.id_user}; Name: {self.name}; Description: {self.description}; Creation Date: {self.creation_date}"
 
 
 class PlaylistDAO(DAO["Playlist"]):
-    @classmethod
-    def save(cls) -> None:
-        pass
+    file_name = "playlist"
 
     @classmethod
-    def load(cls) -> None:
-        pass
+    def to_dict(cls, obj: Playlist) -> dict:
+        return {
+            "id": obj.id,
+            "id_user": obj.id_user,
+            "name": obj.name,
+            "description": obj.description,
+            "creation_date": obj.creation_date.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> Playlist:
+        return Playlist(
+            data["id"],
+            data["id_user"],
+            data["name"],
+            data["description"],
+            datetime.strptime(data["creation_date"], "%Y-%m-%d %H:%M:%S"),
+        )
