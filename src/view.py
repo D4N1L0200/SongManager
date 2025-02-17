@@ -1,4 +1,3 @@
-from ast import Try
 from models.user import User, UserDAO
 from models.library import Library, LibraryDAO
 from models.play_count import PlayCount, PlayCountDAO
