@@ -74,16 +74,16 @@ class DAO(ABC, Generic[T]):
         for obj in cls.objects:
             data.append(cls.to_dict(obj))
 
-        with open(f"data/{cls.file_name}.json", "w") as f:
+        with open(f"src/data/{cls.file_name}.json", "w") as f:
             json.dump(data, f)
 
     @classmethod
     def load(cls) -> None:
-        if not os.path.isfile(f"data/{cls.file_name}.json"):
-            with open(f"data/{cls.file_name}.json", "w") as f:
+        if not os.path.isfile(f"src/data/{cls.file_name}.json"):
+            with open(f"src/data/{cls.file_name}.json", "w") as f:
                 json.dump([], f)
 
-        with open(f"data/{cls.file_name}.json", "r") as f:
+        with open(f"src/data/{cls.file_name}.json", "r") as f:
             data = json.load(f)
 
         cls.clear()
