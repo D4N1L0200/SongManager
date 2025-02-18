@@ -12,6 +12,11 @@ from datetime import datetime, timedelta
 class View():
     #clear insert get getid update delete
     @staticmethod
+    def user_admin():
+        for c in View.users_get():
+            if c.name == "admin": return
+        View.users_insert("admin", "admin", datetime.now(), True)
+    @staticmethod
     def users_clear():
         UserDAO.clear()
     @staticmethod
@@ -43,6 +48,9 @@ class View():
             raise ValueError("ID can't be less than zero")
 
         UserDAO.delete(id)
+    @staticmethod
+    def user_authenticate(email: str, password: str):
+        pass
     @staticmethod
     def playlists_clear():
         PlaylistDAO.clear()
