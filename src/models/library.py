@@ -4,10 +4,6 @@ from models.dao import DAO
 
 class Library:
     def __init__(self, id: int, is_global: bool, folder: str) -> None:
-        self.__id: int = 0
-        self.__is_global: bool = False
-        self.__folder: str = ""
-
         self.id = id
         self.is_global = is_global
         self.folder = folder

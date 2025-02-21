@@ -11,12 +11,6 @@ class Playlist:
         description: str,
         creation_date: datetime,
     ) -> None:
-        self.__id: int = 0
-        self.__id_user: int = 0
-        self.__name: str = ""
-        self.__description: str = ""
-        self.__creation_date: datetime = datetime.now()
-
         self.id = id
         self.id_user = id_user
         self.name = name

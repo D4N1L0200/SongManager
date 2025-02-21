@@ -3,11 +3,6 @@ from models.dao import DAO
 
 class PlaylistItem:
     def __init__(self, id: int, id_playlist: int, id_song: int, count: int) -> None:
-        self.__id: int = 0
-        self.__id_playlist: int = 0
-        self.__id_song: int = 0
-        self.__count: int = 0
-
         self.id = id
         self.id_playlist = id_playlist
         self.id_song = id_song

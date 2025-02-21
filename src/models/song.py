@@ -13,14 +13,6 @@ class Song:
         file: str,
         count: int,
     ) -> None:
-        self.__id: int = 0
-        self.__id_library: int = 0
-        self.__title: str = ""
-        self.__artist: str = ""
-        self.__genre: str = ""
-        self.__file: str = ""
-        self.__count: int = 0
-
         self.id = id
         self.id_library = id_library
         self.title = title

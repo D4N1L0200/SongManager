@@ -11,12 +11,6 @@ class User(HasId):
         creation_date: datetime,
         is_admin: bool,
     ) -> None:
-        self.__id: int = 0
-        self.__name: str = ""
-        self.__password: str = ""
-        self.__creation_date: datetime = datetime.now()
-        self.__is_admin: bool = False
-
         self.id = id
         self.name = name
         self.password = password
