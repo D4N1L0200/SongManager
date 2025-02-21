@@ -35,8 +35,8 @@ class IndexUI:
             MyPlaylistsUI.main()
 
     @staticmethod
-    def quit():
-        if st.sidebar.button("Quit"):
+    def logout():
+        if st.sidebar.button("Logout"):
             del st.session_state["user_id"]
             del st.session_state["user_name"]
             st.rerun()
@@ -55,7 +55,7 @@ class IndexUI:
             else:
                 IndexUI.user_menu()
 
-            IndexUI.quit()
+            IndexUI.logout()
 
     @staticmethod
     def main():
