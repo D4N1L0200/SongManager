@@ -121,10 +121,14 @@ class View:
 
     @staticmethod
     def songs_insert(
-        id_library: int, title: str, artist: str, genre: str, file: str, count: int
+        id_library: int, title: str, artist: str, genre: str, file_name: str, count: int, file
     ):
-        s = Song(id, id_library, title, artist, genre, file, count)
+        if file is None:
+            raise ValueError("Invalid file")
+
+        s = Song(0, id_library, title, artist, genre, file_name, count)
         SongDAO.insert(s)
+        SongDAO.insert_audio_file(s, file)
 
     @staticmethod
     def songs_get():
@@ -135,7 +139,11 @@ class View:
         if id < 0:
             raise ValueError("ID can't be less than zero")
         return SongDAO.get_by_id(id)
-
+    @staticmethod
+    def get_user_owned_songs(id_user: int):
+        if id_user < 0:
+            raise ValueError("ID can't be less than zero")
+        return SongDAO.get_user_owned_songs(id_user)
     @staticmethod
     def songs_update(
         id: int,

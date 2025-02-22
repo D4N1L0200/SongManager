@@ -2,3 +2,4 @@
 **/*.json
 .mypy_cache/
 *.lock
+src/data/songs/*

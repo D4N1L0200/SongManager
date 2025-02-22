@@ -1,6 +1,5 @@
-# import os
+import os
 from models.dao import DAO
-
 
 class Song:
     def __init__(
@@ -151,3 +150,27 @@ class SongDAO(DAO["Song"]):
             data["file"],
             data["count"],
         )
+    
+    @classmethod
+    def get_user_owned_songs(cls, id_user: int):
+        return [song for song in cls.objects if song.id_library == id_user]
+    
+    @classmethod
+    def get_global_songs(cls):
+        return [song for song in cls.objects if song.id_library == 1]
+
+    @classmethod
+    def insert_audio_file(cls, obj: Song, audio_file) -> None:
+        audio_dir = "src/data/songs"
+        if not os.path.exists(audio_dir):
+            os.makedirs(audio_dir)
+
+        audio_path = os.path.join(audio_dir, f"{obj.id}_{audio_file.name}")
+
+        with open(audio_path, "wb") as f:
+            f.write(audio_file.getbuffer())
+
+        obj.file = audio_path
+        SongDAO.update(obj.id, obj)
+
+    

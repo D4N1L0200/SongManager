@@ -74,12 +74,12 @@ class DAO(ABC, Generic[T]):
         for obj in cls.objects:
             data.append(cls.to_dict(obj))
 
-        with open(f"src/data/{cls.file_name}.json", "w") as f:
+        with open(f"src/data/jsons/{cls.file_name}.json", "w") as f:
             json.dump(data, f)
 
     @classmethod
     def load(cls) -> None:
-        data_dir = "src/data"
+        data_dir = "src/data/jsons"
         if not os.path.exists(data_dir):
             os.makedirs(data_dir)
 
