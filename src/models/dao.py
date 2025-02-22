@@ -83,7 +83,7 @@ class DAO(ABC, Generic[T]):
         if not os.path.exists(data_dir):
             os.makedirs(data_dir)
 
-        if not os.path.isfile(f"src/data/{cls.file_name}.json"):
+        if not os.path.isfile(f"{data_dir}/{cls.file_name}.json"):
             with open(f"{data_dir}/{cls.file_name}.json", "w") as f:
                 json.dump([], f)
 
