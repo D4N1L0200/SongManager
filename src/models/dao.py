@@ -79,11 +79,15 @@ class DAO(ABC, Generic[T]):
 
     @classmethod
     def load(cls) -> None:
+        data_dir = "src/data"
+        if not os.path.exists(data_dir):
+            os.makedirs(data_dir)
+
         if not os.path.isfile(f"src/data/{cls.file_name}.json"):
-            with open(f"src/data/{cls.file_name}.json", "w") as f:
+            with open(f"{data_dir}/{cls.file_name}.json", "w") as f:
                 json.dump([], f)
 
-        with open(f"src/data/{cls.file_name}.json", "r") as f:
+        with open(f"{data_dir}/{cls.file_name}.json", "r") as f:
             data = json.load(f)
 
         cls.clear()
