@@ -142,6 +142,10 @@ class View:
         if id < 0:
             raise ValueError("ID can't be less than zero")
         return SongDAO.get_by_id(id)
+
+    @staticmethod
+    def get_all_global_songs():
+        return SongDAO.get_all_global_songs()
     @staticmethod
     def get_user_owned_songs(id_user: int):
         if id_user < 0:

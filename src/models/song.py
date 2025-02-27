@@ -156,7 +156,7 @@ class SongDAO(DAO["Song"]):
         return [song for song in cls.objects if song.id_library == id_user]
     
     @classmethod
-    def get_global_songs(cls):
+    def get_all_global_songs(cls):
         return [song for song in cls.objects if song.id_library == 1]
 
     @classmethod
