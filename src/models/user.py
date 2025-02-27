@@ -110,3 +110,11 @@ class UserDAO(DAO["User"]):
             datetime.strptime(data["creation_date"], "%Y-%m-%d %H:%M:%S"),
             data["is_admin"],
         )
+
+    @classmethod
+    def is_name_taken(cls, name: str) -> bool:
+        for user in cls.objects:
+            if user.name == name:
+                return True
+
+        return False

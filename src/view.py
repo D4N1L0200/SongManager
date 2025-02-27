@@ -26,6 +26,7 @@ class View:
             if c.name == "admin":
                 return
         View.users_insert("admin", "admin", datetime.now(), True)
+        # View.libraries_insert(True, "global")
 
     @staticmethod
     def users_clear():
@@ -35,6 +36,7 @@ class View:
     def users_insert(name: str, password: str, creation_date: datetime, is_admin: bool):
         u = User(0, name, password, creation_date, is_admin)
         UserDAO.insert(u)
+        View.libraries_insert(is_admin, name)
 
     @staticmethod
     def users_get():
@@ -45,6 +47,10 @@ class View:
         if id < 0:
             raise ValueError("ID can't be less than zero")
         return UserDAO.get_by_id(id)
+
+    @staticmethod
+    def is_name_taken(name: str):
+        return UserDAO.is_name_taken(name)
 
     @staticmethod
     def users_update(id: int, name: str, password: str):

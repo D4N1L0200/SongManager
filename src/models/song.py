@@ -161,7 +161,11 @@ class SongDAO(DAO["Song"]):
 
     @classmethod
     def insert_audio_file(cls, obj: Song, audio_file) -> None:
-        audio_dir = "src/data/songs"
+        from view import View
+
+        library = View.libraries_get_by_id(obj.id_library)
+
+        audio_dir = f"src/data/songs/{library.folder}"
         if not os.path.exists(audio_dir):
             os.makedirs(audio_dir)
 

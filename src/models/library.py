@@ -1,6 +1,5 @@
-# import os
+import os
 from models.dao import DAO
-
 
 class Library:
     def __init__(self, id: int, is_global: bool, folder: str) -> None:
