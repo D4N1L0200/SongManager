@@ -47,7 +47,7 @@ class View:
         return UserDAO.get_by_id(id)
 
     @staticmethod
-    def users_update(id: int, name: str, password: str, creation_date: datetime):
+    def users_update(id: int, name: str, password: str):
         if id < 0:
             raise ValueError("Invalid ID")
         if not UserDAO.get_by_id(id):
@@ -55,8 +55,11 @@ class View:
         if len(name) < 2:
             raise ValueError("Invalid name")
 
+        o = UserDAO.get_by_id(id)
+        creation_date = o.creation_date
+
         u = User(id, name, password, creation_date, False)
-        UserDAO.update(u)
+        UserDAO.update(id, u)
 
     @staticmethod
     def users_delete(id: int):
@@ -106,7 +109,7 @@ class View:
             raise ValueError("Invalid description")
 
         p = Playlist(id, id_user, name, description, creation_date)
-        PlaylistDAO.update(p)
+        PlaylistDAO.update(id, p)
 
     @staticmethod
     def playlists_delete(id: int):
@@ -166,7 +169,7 @@ class View:
             raise ValueError("Invalid file")
 
         s = Song(id, id_library, title, artist, genre, file, count)
-        SongDAO.update(s)
+        SongDAO.update(id, s)
 
     @staticmethod
     def songs_delete(id: int):
@@ -200,7 +203,7 @@ class View:
             raise ValueError("Invalid ID")
 
         l = Library(id, is_global, folder)
-        LibraryDAO.update(l)
+        LibraryDAO.update(id, l)
 
     @staticmethod
     def libraries_delete(id: int):
@@ -234,7 +237,7 @@ class View:
             raise ValueError("Invalid ID")
 
         pc = PlayCount(id, id_user, id_song, count)
-        PlayCountDAO.update(pc)
+        PlayCountDAO.update(id, pc)
 
     @staticmethod
     def playcounts_delete(id: int):
@@ -277,7 +280,7 @@ class View:
             raise ValueError("Invalid ID")
 
         pi = PlaylistItem(id, id_playlist, id_song, count)
-        PlaylistItemDAO.update(pi)
+        PlaylistItemDAO.update(id, pi)
 
     @staticmethod
     def playlistitems_delete(id: int):
