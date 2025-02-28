@@ -17,9 +17,11 @@ class MyPlaylistsUI:
         with tab5: MyPlaylistsUI.delete_playlist()
     @staticmethod
     def see_my_playlists():
+        # pegar todas as playlists, para cada playlist pegar todos os seus items e pegar as musicas desses items
         pass
     @staticmethod
     def add_music_to_playlist():
+        # criar um playlistitem relacionado com uma playlist
         pass
     @staticmethod
     def create_playlist():
