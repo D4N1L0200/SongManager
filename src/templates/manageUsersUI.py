@@ -26,7 +26,7 @@ class ManageUsersUI:
         new_password = st.text_input("Enter the new password", type="password")
         if st.button("Update user"):
             if not user_id or not new_name or not new_password:
-                st.error("Please fill in all the fields")
+                st.error("Please fill all the fields")
                 return
             if user_id not in df["id"].values:
                 st.error("Invalid user ID")
@@ -47,7 +47,7 @@ class ManageUsersUI:
         user_id = st.number_input("Enter the ID of the user to delete", min_value=2)
         if st.button("Delete user"):
             if not user_id:
-                st.error("Please fill in all the fields")
+                st.error("Please fill all the fields")
                 return
             if user_id not in df["id"].values:
                 st.error("Invalid user ID")

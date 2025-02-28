@@ -51,13 +51,12 @@ class MySongsUI:
         file = st.file_uploader("Insert a MP3 or a WAV file:", type = ["mp3", "wav"])
         if st.button("Add song"):
             if title and artist and genre and file:
-                st.write(st.session_state["user_id"])
                 View.songs_insert((st.session_state["user_id"]), title, artist, genre, file.name, 0, file)
                 st.success("Song inserted with sucess")
                 time.sleep(2)
                 st.rerun()
             else:
-                st.error("Please fill in all the fields")
+                st.error("Please fill all the fields")
     @staticmethod
     def add_global_songs():
         pass
