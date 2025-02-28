@@ -110,6 +110,12 @@ class View:
         return PlaylistDAO.get_owned_playlists(id_user)
 
     @staticmethod
+    def get_owned_playlists_minus_liked(id_user: int):
+        all_playlists = PlaylistDAO.get_owned_playlists(id_user)
+        playlists_minus_liked = [p for p in all_playlists if p.name != "Liked songs"]
+        return playlists_minus_liked
+
+    @staticmethod
     def get_liked_songs_id_by_user(user_id: int):
         if user_id < 0:
             raise ValueError("ID can't be less than zero")

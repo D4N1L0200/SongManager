@@ -19,7 +19,8 @@ class MyPlaylistsUI:
     @staticmethod
     def see_my_playlists():
         # pegar todas as playlists, para cada playlist pegar todos os seus items e pegar as musicas desses items
-        playlists = View.get_owned_playlists(st.session_state["user_id"])
+        # st.subheader("See your playlists")
+        playlists = View.get_owned_playlists_minus_liked(st.session_state["user_id"])
         
         if playlists:
             df = pd.DataFrame([{"id": playlist.id, "name": playlist.name, "description": playlist.description} for playlist in playlists])
@@ -36,6 +37,7 @@ class MyPlaylistsUI:
                     return
 
                 songs = View.get_songs_by_playlist(playlist_id)
+                st.subheader(f"Playlist: {playlist_to_see.name}")
                 if songs:
                     for song in songs:
                         song_title = song.title
@@ -53,6 +55,8 @@ class MyPlaylistsUI:
     @staticmethod
     def add_music_to_playlist():
         # criar um playlistitem relacionado com uma playlist
+        # st.subheader("Add some of your liked songs to a playlist")
+
         id_liked_songs = View.get_liked_songs_id_by_user(st.session_state["user_id"])
 
         if id_liked_songs:
@@ -63,7 +67,7 @@ class MyPlaylistsUI:
 
                 song_to_add = st.selectbox("Select a song to add", [song for song in songs])
 
-                playlist_to_add = st.selectbox("Select a playlist to add", [playlist for playlist in View.get_owned_playlists(st.session_state["user_id"])])
+                playlist_to_add = st.selectbox("Select a playlist to add", [playlist for playlist in View.get_owned_playlists_minus_liked(st.session_state["user_id"])])
 
                 if st.button("Add song to playlist"):
                     if not song_to_add or not playlist_to_add:
@@ -76,6 +80,8 @@ class MyPlaylistsUI:
 
     @staticmethod
     def create_playlist():
+        # st.subheader("Create a playlist")
+
         name = st.text_input("Insert the playlist's name")
         description = st.text_input("Insert the playlist's description")
         if st.button("Create playlist"):
@@ -88,7 +94,9 @@ class MyPlaylistsUI:
             st.rerun()
     @staticmethod
     def update_playlist():
-        playlists = View.get_owned_playlists(st.session_state["user_id"])
+        # st.subheader("Update your playlists")
+
+        playlists = View.get_owned_playlists_minus_liked(st.session_state["user_id"])
 
         if playlists:
             df = pd.DataFrame([{"id": playlist.id, "name": playlist.name, "description": playlist.description} for playlist in playlists])
@@ -109,7 +117,8 @@ class MyPlaylistsUI:
                         st.error("Make sure to change at least one field with a valid new value")
     @staticmethod
     def delete_playlist():
-        playlists = View.get_owned_playlists(st.session_state["user_id"])
+        # st.subheader("Delete a playlist")
+        playlists = View.get_owned_playlists_minus_liked(st.session_state["user_id"])
 
         if playlists:
             df = pd.DataFrame([{"id": playlist.id, "name": playlist.name, "description": playlist.description} for playlist in playlists])

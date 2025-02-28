@@ -17,6 +17,8 @@ class MySongsUI:
     @staticmethod
     def see_my_songs():
         #O usuário pode ver as músicas globais por essa playlist, tipo "músicas curtidas", as músicas que são associadas diretamente à ele são só aquelas que fazem parte de sua library, ou seja, suas músicas próprias. Para escutar uma música global como se fosse sua, é preciso adicioná-la à essa "músicas curtidas", que na verdade não é músicas curtidas, mas sim uma playlist com as músicas globais e as próprias. É preciso arrumar um nome melhor para ela.
+        # st.subheader("Your Liked Songs")
+        
         id_liked_songs = View.get_liked_songs_id_by_user(st.session_state["user_id"])
 
         if id_liked_songs:
@@ -43,6 +45,8 @@ class MySongsUI:
     def see_my_own_songs():
         #library
         #pode deletar músicas aqui também
+        # st.subheader("Your own Songs")
+
         own_songs = View.get_user_owned_songs(st.session_state["user_id"])
 
         if own_songs:
@@ -66,6 +70,8 @@ class MySongsUI:
 
     @staticmethod
     def add_song():
+        # st.subheader("Add a Song to Your Library")
+
         title = st.text_input("Insert the song's title:")
         artist = st.text_input("Insert the song's artist:")
         genre = st.text_input("Insert the song's genre:")
@@ -81,6 +87,8 @@ class MySongsUI:
     @staticmethod
     def add_global_songs():
         #aqui você adiciona as músicas globais à Liked Songs para poder adicionar qualquer das liked songs em alguma playlist
+        # st.subheader("Add Global Songs to Your Liked Songs Playlist")
+
         liked_songs_id = View.get_liked_songs_id_by_user(st.session_state["user_id"])
 
         liked_songs_songs = View.get_songs_by_playlist(liked_songs_id)
@@ -91,6 +99,10 @@ class MySongsUI:
             liked_songs_ids = [song.id for song in liked_songs_songs]
 
             songs_to_show = [song for song in global_songs if song.id not in liked_songs_ids]
+
+            if not songs_to_show:
+                st.write("You already liked all the global songs")
+                return
 
             df = pd.DataFrame([{"title": song.title, "artist": song.artist, "genre": song.genre} for song in songs_to_show])
             st.dataframe(df)
