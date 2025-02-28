@@ -89,3 +89,9 @@ class PlaylistItemDAO(DAO["PlaylistItem"]):
     @classmethod
     def get_playlist_items_by_playlist(cls, id_playlist: int) -> list[PlaylistItem]:
         return [obj for obj in cls.objects if obj.id_playlist == id_playlist]
+
+    @classmethod
+    def delete_all_playlistitems_by_playlist(cls, id_playlist: int) -> None: 
+        for obj in cls.objects:
+            if obj.id_playlist == id_playlist:
+                cls.delete(obj.id)

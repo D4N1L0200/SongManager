@@ -134,6 +134,7 @@ class View:
             raise ValueError("ID can't be less than zero")
 
         PlaylistDAO.delete(id)
+        View.playlistitems_delete_by_playlist(id)
 
     @staticmethod
     def songs_clear():
@@ -330,3 +331,10 @@ class View:
             raise ValueError("ID can't be less than zero")
 
         PlaylistItemDAO.delete(id)
+    
+    @staticmethod
+    def playlistitems_delete_by_playlist(id_playlist: int):
+        if id_playlist < 0:
+            raise ValueError("ID can't be less than zero")
+
+        PlaylistItemDAO.delete_all_playlistitems_by_playlist(id_playlist)

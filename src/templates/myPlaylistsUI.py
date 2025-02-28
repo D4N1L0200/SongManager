@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 from view import View
@@ -18,11 +19,61 @@ class MyPlaylistsUI:
     @staticmethod
     def see_my_playlists():
         # pegar todas as playlists, para cada playlist pegar todos os seus items e pegar as musicas desses items
-        pass
+        playlists = View.get_owned_playlists(st.session_state["user_id"])
+        
+        if playlists:
+            df = pd.DataFrame([{"id": playlist.id, "name": playlist.name, "description": playlist.description} for playlist in playlists])
+            st.dataframe(df)
+
+            playlist_to_see = st.selectbox("Select a playlist to see", [playlist for playlist in playlists])
+            playlist_id = playlist_to_see.id
+            if st.button("See playlist"):
+                if not playlist_id:
+                    st.error("Please fill all the fields")
+                    return
+                if playlist_id not in df["id"].values:
+                    st.error("Invalid playlist ID")
+                    return
+
+                songs = View.get_songs_by_playlist(playlist_id)
+                if songs:
+                    for song in songs:
+                        song_title = song.title
+                        song_file_path = song.file
+
+                        st.write(f"{song_title} - {song.artist}")
+                        if os.path.isfile(song_file_path):
+                            if song_file_path.endswith(".mp3"):
+                                st.audio(song_file_path, format="audio/mp3")
+                            elif song_file_path.endswith(".wav"):
+                                st.audio(song_file_path, format="audio/wav")
+                        else:
+                            st.write(f"Cannot play {song_title}, file not found.")
+        
     @staticmethod
     def add_music_to_playlist():
         # criar um playlistitem relacionado com uma playlist
-        pass
+        id_liked_songs = View.get_liked_songs_id_by_user(st.session_state["user_id"])
+
+        if id_liked_songs:
+            songs = View.get_songs_by_playlist(id_liked_songs)
+            if songs:
+                df = pd.DataFrame([{"title": song.title, "artist": song.artist, "genre": song.genre} for song in songs])
+                st.dataframe(df)
+
+                song_to_add = st.selectbox("Select a song to add", [song for song in songs])
+
+                playlist_to_add = st.selectbox("Select a playlist to add", [playlist for playlist in View.get_owned_playlists(st.session_state["user_id"])])
+
+                if st.button("Add song to playlist"):
+                    if not song_to_add or not playlist_to_add:
+                        st.error("Please fill all the fields")
+                        return
+                    View.playlistitems_insert(playlist_to_add.id, song_to_add.id, 0)
+                    st.success("Song added to playlist with sucess")
+                    time.sleep(2)
+                    st.rerun()
+
     @staticmethod
     def create_playlist():
         name = st.text_input("Insert the playlist's name")
