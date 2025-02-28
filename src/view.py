@@ -104,6 +104,10 @@ class View:
         return PlaylistDAO.get_by_id(id)
 
     @staticmethod
+    def get_owned_playlists(id_user: int):
+        return PlaylistDAO.get_owned_playlists(id_user)
+
+    @staticmethod
     def playlists_update(
         id: int, id_user: int, name: str, description: str, creation_date: datetime
     ):

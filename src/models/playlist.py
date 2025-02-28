@@ -112,3 +112,7 @@ class PlaylistDAO(DAO["Playlist"]):
             data["description"],
             datetime.strptime(data["creation_date"], "%Y-%m-%d %H:%M:%S"),
         )
+    
+    @staticmethod
+    def get_owned_playlists(id_user: int) -> list[Playlist]:
+        return [p for p in PlaylistDAO.objects if p.id_user == id_user]

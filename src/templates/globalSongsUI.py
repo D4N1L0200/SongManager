@@ -75,7 +75,7 @@ class GlobalSongsUI:
                         time.sleep(2)
                         st.rerun()
                     else:
-                        st.error("Please fill all the fields")
+                        st.error("Make sure to change at least one field with a valid new value")
 
     @staticmethod
     def delete_global_songs():
