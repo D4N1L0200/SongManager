@@ -37,6 +37,8 @@ class View:
         u = User(0, name, password, creation_date, is_admin)
         UserDAO.insert(u)
         View.libraries_insert(is_admin, name)
+        if not is_admin:
+            View.playlists_insert(0, u.id, "Liked songs", "Your liked songs", datetime.now())
 
     @staticmethod
     def users_get():
@@ -108,6 +110,11 @@ class View:
         return PlaylistDAO.get_owned_playlists(id_user)
 
     @staticmethod
+    def get_liked_songs_id_by_user(user_id: int):
+        if user_id < 0:
+            raise ValueError("ID can't be less than zero")
+        return PlaylistDAO.get_liked_songs_id_by_user(user_id)
+    @staticmethod
     def playlists_update(
         id: int, id_user: int, name: str, description: str, creation_date: datetime
     ):
@@ -142,6 +149,12 @@ class View:
         s = Song(0, id_library, title, artist, genre, file_name, count)
         SongDAO.insert(s)
         SongDAO.insert_audio_file(s, file)
+        if id_library != 1:
+            liked_songs_id = View.get_liked_songs_id_by_user(id_library)
+            if liked_songs_id is None:
+                View.playlists_insert(0, id_library, "Liked songs", "Your liked songs", datetime.now())
+            else:    
+                View.playlistitems_insert(liked_songs_id, s.id, 0)
 
     @staticmethod
     def songs_get():
@@ -161,6 +174,16 @@ class View:
         if id_user < 0:
             raise ValueError("ID can't be less than zero")
         return SongDAO.get_user_owned_songs(id_user)
+    @staticmethod
+    def get_songs_by_playlist(id_playlist: int):
+        if id_playlist < 0:
+            raise ValueError("ID can't be less than zero")
+        songs = []
+        items = View.get_playlist_items_by_playlist(id_playlist)
+        for item in items:
+            songs.append(View.songs_get_by_id(item.id_song))
+        return songs
+
     @staticmethod
     def songs_update(
         id: int,
@@ -284,6 +307,11 @@ class View:
             raise ValueError("ID can't be less than zero")
         return PlaylistItemDAO.get_by_id(id)
 
+    @staticmethod
+    def get_playlist_items_by_playlist(id_playlist: int):
+        if id_playlist < 0:
+            raise ValueError("ID can't be less than zero")
+        return PlaylistItemDAO.get_playlist_items_by_playlist(id_playlist)
     @staticmethod
     def playlistitems_update(id: int, id_playlist: int, id_song: int, count: int):
         if id < 0:

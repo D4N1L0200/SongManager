@@ -56,8 +56,8 @@ class PlaylistItem:
     def count(self, count: int) -> None:
         if not isinstance(count, int):
             raise TypeError("'count' must be an integer")
-        if count <= 0:
-            raise ValueError("'count' can't be less than zero or equal to zero")
+        # if count <= 0:
+        #     raise ValueError("'count' can't be less than zero or equal to zero")
 
         self.__count = count
 
@@ -85,3 +85,7 @@ class PlaylistItemDAO(DAO["PlaylistItem"]):
             data["id_song"],
             data["count"],
         )
+    
+    @classmethod
+    def get_playlist_items_by_playlist(cls, id_playlist: int) -> list[PlaylistItem]:
+        return [obj for obj in cls.objects if obj.id_playlist == id_playlist]

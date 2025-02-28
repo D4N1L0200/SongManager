@@ -116,3 +116,17 @@ class PlaylistDAO(DAO["Playlist"]):
     @staticmethod
     def get_owned_playlists(id_user: int) -> list[Playlist]:
         return [p for p in PlaylistDAO.objects if p.id_user == id_user]
+
+    @staticmethod
+    def get_liked_songs_id_by_user(id_user: int) -> int:
+        liked_songs_playlists = [p.id for p in PlaylistDAO.objects if p.id_user == id_user and p.name == "Liked songs"]
+        
+        if not liked_songs_playlists:
+            raise ValueError(f"No 'Liked songs' playlist found for user {id_user}")
+        
+        if len(liked_songs_playlists) > 1:
+            raise ValueError(f"Multiple 'Liked songs' playlists found for user {id_user}. This is an invalid state.")
+        
+        return liked_songs_playlists[0]
+        #solução preguiçosa e perigosa, parabéns, eu mesmo
+        #deve-se impedir o usuário de modificar o nome da playlist "Liked songs"
